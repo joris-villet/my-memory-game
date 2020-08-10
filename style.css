@@ -18,6 +18,11 @@ body {
    margin: 2rem auto;
 }
 
+.title-game {
+   margin: 2rem auto;
+   font-family: 'Press Start 2P', cursive;
+}
+
 .grid {
    display: inline-block;
    margin: 0 auto;
@@ -52,7 +57,7 @@ body {
  }
 
  .isFocus {
-   animation: .5s linear 0s zoom;
+   animation: .3s linear 0s zoom;
  }
 
  @keyframes zoom {

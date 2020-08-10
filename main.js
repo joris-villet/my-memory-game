@@ -22,11 +22,11 @@ window.addEventListener('DOMContentLoaded', () => {
    };
  
    function showBtn(target){
-     return target.style.opacity = "1";
+     target.style.opacity = "1";
    };
    
    function hideBtn(target){
-     return target.style.opacity = "0";
+     target.style.opacity = "0";
    };
    
    function showMessage(str){
@@ -36,50 +36,61 @@ window.addEventListener('DOMContentLoaded', () => {
  
    function hideMessage(){
       div.result.classList.remove("isFocus")
-      div.result.textContent = " ";
+      div.result.textContent = "";
    };
  
    showBtn(btn.play);
- 
+   stopClickBtn();
+  
+
    // Variables pour stocker la difficulté
    let times = 2;
    let speed = 700;
  
    // Ecouteurs d'évenements sur buttons
-   btn.play.addEventListener('click', function(e){
-     showMessage("")
-     gameTime(times, speed);
-     hideBtn(btn.play);
-   });
+   btn.play.addEventListener('click', startGame);
+     
+   function startGame(){
+      showMessage("");
+      hideMessage()
+      gameTime(times, speed);
+      hideBtn(btn.play);
+   }
  
-   btn.valid.addEventListener('click', function(e){
-     stopPlayerDo();
-     hideMessage();
-     hideBtn(btn.valid);
-     checkForMatch();
-   });
+   btn.valid.addEventListener('click', checkGame)
+    
+   function checkGame(){
+      stopPlayerDo();
+      hideMessage();
+      hideBtn(btn.valid);
+      checkForMatch();
+   }
+
+   function stopClickBtn(){
+      btn.valid.removeEventListener('click', checkGame);
+   }
  
  
    function playerDo(){
-     cell.forEach( cell => {
-       cell.style.cursor = "pointer";
-       cell.addEventListener('click', function(){
-         if(cell.classList.contains("cellChosen")){
-           cellChoseId.pop(cell)
-           cell.classList.remove("cellChosen");
-         }
-         else {
-           cellChoseId.push(cell)
-           cell.classList.add("cellChosen");
-           console.log(cellChoseId)
-         }
-       })
-     })
+      cell.forEach( cell => {
+         cell.style.cursor = "pointer";
+         cell.addEventListener('click', function(){
+            if(cell.classList.contains("cellChosen")){
+            cellChoseId.pop(cell)
+            cell.classList.remove("cellChosen");
+            }
+            else {
+            cellChoseId.push(cell)
+            cell.classList.add("cellChosen");
+            console.log(cellChoseId)
+            }
+         })
+      })
    }
  
    function stopPlayerDo(){
      cell.forEach( cell => {
-       cell.style.cursor = "normal";
+       cell.style.cursor = "inherit";
        cell.removeEventListener('click', playerDo, true);
      });
    };
@@ -147,7 +158,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     if(player === robot){
       console.log("ya match")
-      showMessage("Bien joué mais facile");
+      showMessage(`C'était trop facile \u{1F606}`);
       clearGrid();
       playerDo()
       window.setTimeout(nextLevel, 2000);
@@ -155,7 +166,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     else {
      console.log("ya pas match")
-     showMessage("Déjà perdu t'abuses...")
+     showMessage(`Déjà perdu t'abuses...\u{1F631}`)
      clearGrid();
      playerDo()
      btn.play.textContent = "Rejouez";
