@@ -40,8 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
    };
  
    showBtn(btn.play);
-   stopClickBtn();
-  
+
 
    // Variables pour stocker la difficulté
    let times = 2;
@@ -57,7 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
       hideBtn(btn.play);
    }
  
-   btn.valid.addEventListener('click', checkGame)
+   
     
    function checkGame(){
       stopPlayerDo();
@@ -65,11 +64,6 @@ window.addEventListener('DOMContentLoaded', () => {
       hideBtn(btn.valid);
       checkForMatch();
    }
-
-   function stopClickBtn(){
-      btn.valid.removeEventListener('click', checkGame);
-   }
- 
  
    function playerDo(){
       cell.forEach( cell => {
@@ -90,7 +84,7 @@ window.addEventListener('DOMContentLoaded', () => {
  
    function stopPlayerDo(){
      cell.forEach( cell => {
-       cell.style.cursor = "inherit";
+       cell.style.cursor = "initial";
        cell.removeEventListener('click', playerDo, true);
      });
    };
@@ -132,6 +126,7 @@ window.addEventListener('DOMContentLoaded', () => {
          ball.classList.remove("ball");
          playerDo();
          showBtn(btn.valid)
+         btn.valid.addEventListener('click', checkGame);
        } else {
          intervalBall();
        }     
@@ -147,44 +142,44 @@ window.addEventListener('DOMContentLoaded', () => {
  
    // Vérification si joueur à cocher même cellules que robot
    function checkForMatch(){
-     let player;
-     let robot;
-     // comparer par rapport aux index de chaque tableaux
-    for(let i = 0; i < cellChosen.length; i++){
-      robot = cellChosen[i]
-    }
-    for(let j = 0; j < cellChoseId.length; j++){
-      player = cellChoseId[j]
-    }
-    if(player === robot){
-      console.log("ya match")
-      showMessage(`C'était trop facile \u{1F606}`);
+      let player;
+      let robot;
+      // comparer par rapport aux index de chaque tableaux
+      for(let i = 0; i < cellChosen.length; i++){
+         robot = cellChosen[i]
+      }
+      for(let j = 0; j < cellChoseId.length; j++){
+         player = cellChoseId[j]
+      }
+      if(player === robot){
+         console.log("ya match")
+         showMessage(`C'était trop facile \u{1F606}`);
+         clearGrid();
+         playerDo()
+         window.setTimeout(nextLevel, 2000);
+         hideBtn(btn.play);
+      }
+      else {
+      console.log("ya pas match")
+      showMessage(`Déjà perdu t'abuses...\u{1F631}`)
       clearGrid();
       playerDo()
-      window.setTimeout(nextLevel, 2000);
-      hideBtn(btn.play);
-    }
-    else {
-     console.log("ya pas match")
-     showMessage(`Déjà perdu t'abuses...\u{1F631}`)
-     clearGrid();
-     playerDo()
-     btn.play.textContent = "Rejouez";
-     showBtn(btn.play);
-     times = 2;
-     speed = 700;
-    }
+      btn.play.textContent = "Rejouez";
+      showBtn(btn.play);
+      times = 2;
+      speed = 700;
+      }
    }
  
    // condition et apparitions des balls
    function intervalBall(){
-     console.log('lancement du jeu');
-     let number = random();
-     switch(number){
-       case number:
-         showBall(number);
-         break;
-     }
+      console.log('lancement du jeu');
+      let number = random();
+      switch(number){
+         case number:
+            showBall(number);
+            break;
+      }
    }
  });
    
