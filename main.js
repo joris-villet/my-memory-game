@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-   console.log("document chargé");
+  console.log("document chargé");
  
    // tableau qui conserve les cellules choisit par l'ordi
    let cellChosen = [];
@@ -17,27 +17,23 @@ window.addEventListener('DOMContentLoaded', () => {
    };
  
    // Déclarations variables input
-   const div = {
-     result: document.querySelector('#result')
-   };
- 
-   function showBtn(target){
-     target.style.opacity = "1";
-   };
+   const displayResult = document.querySelector('#result');
+
+   const showBtn = (target) => target.style.opacity = '1';
+   const hideBtn = (target) => target.style.opacity = "0";
+
+   // nombre aléatoire sur la longueur de la grille
+   const random = () => Math.round(Math.random() * cell.length);
+
+   const showMessage = (str) => {
+      displayResult.classList.add("isFocus")
+      displayResult.textContent = str;
+   }
    
-   function hideBtn(target){
-     target.style.opacity = "0";
-   };
-   
-   function showMessage(str){
-      div.result.classList.add("isFocus")
-      div.result.textContent = str;
-   };
- 
-   function hideMessage(){
-      div.result.classList.remove("isFocus")
-      div.result.textContent = "";
-   };
+   const hideMessage = () => {
+      displayResult.classList.remove("isFocus")
+      displayResult.textContent = "";
+   }
  
    showBtn(btn.play);
 
@@ -46,56 +42,51 @@ window.addEventListener('DOMContentLoaded', () => {
    let times = 2;
    let speed = 700;
  
-   // Ecouteurs d'évenements sur buttons
-   btn.play.addEventListener('click', startGame);
-     
-   function startGame(){
-      showMessage("");
-      hideMessage()
-      gameTime(times, speed);
-      hideBtn(btn.play);
-   }
- 
+   
+   const startGame = () => {
+     showMessage("");
+     hideMessage()
+     gameTime(times, speed);
+     hideBtn(btn.play);
+    }
+    
+    // Ecouteurs d'évenements sur buttons
+    btn.play.addEventListener('click', startGame);
    
     
-   function checkGame(){
+   const checkGame = () => {
       stopPlayerDo();
       hideMessage();
       hideBtn(btn.valid);
       checkForMatch();
    }
  
-   function playerDo(){
-      cell.forEach( cell => {
+   const playerDo = () => {
+      cell.forEach(cell => {
          cell.style.cursor = "pointer";
-         cell.addEventListener('click', function(){
-            if(cell.classList.contains("cellChosen")){
-            cellChoseId.pop(cell)
-            cell.classList.remove("cellChosen");
+         cell.addEventListener('click',() => {
+            if (cell.classList.contains("cellChosen")){
+              cellChoseId.pop(cell)
+              cell.classList.remove("cellChosen");
             }
             else {
-            cellChoseId.push(cell)
-            cell.classList.add("cellChosen");
-            console.log(cellChoseId)
+              cellChoseId.push(cell)
+              cell.classList.add("cellChosen");
+              console.log(cellChoseId)
             }
          })
       })
    }
  
-   function stopPlayerDo(){
-     cell.forEach( cell => {
+   const stopPlayerDo = () => {
+     cell.forEach(cell => {
        cell.style.cursor = "initial";
        cell.removeEventListener('click', playerDo, true);
      });
    };
    
-   // nombre aléatoire sur la longueur de la grille
-   function random(){
-     return Math.round(Math.random() * cell.length);
-   };
-   
    // Nettoyage de la grille
-   function clearGrid(){
+   const clearGrid = () => {
      cellChosen = [];
      console.log(cellChosen)
      cellChoseId = [];
@@ -107,7 +98,7 @@ window.addEventListener('DOMContentLoaded', () => {
    };
  
    // Robot joue
-   function showBall(index){
+   const showBall = (index) => {
      ball.classList.add("ball");
      cell[index].appendChild(ball);
      cellChosen.push(cell[index]);
@@ -116,42 +107,43 @@ window.addEventListener('DOMContentLoaded', () => {
  
  
    // Nombres de balls et vitesse selon le niveau de difficulté
-   function gameTime(times, speed){
+   const gameTime = (times, speed) => {
      let i = 0;
      let interval = setInterval(() => {
        i++;
-       if(i > times){
+       if (i > times){
          clearInterval(interval);
          showMessage("A vous");
          ball.classList.remove("ball");
          playerDo();
          showBtn(btn.valid)
          btn.valid.addEventListener('click', checkGame);
-       } else {
+       } 
+       else {
          intervalBall();
        }     
      }, speed);  
    }
    
    // Déclaration du niveau suivant en incrémentant times et speed
-   function nextLevel(){
+   const nextLevel = () => {
       hideMessage("")
       gameTime(times++, speed += - 50);
    };
  
  
    // Vérification si joueur à cocher même cellules que robot
-   function checkForMatch(){
+   const checkForMatch = () => {
       let player;
       let robot;
       // comparer par rapport aux index de chaque tableaux
-      for(let i = 0; i < cellChosen.length; i++){
+      for (let i = 0; i < cellChosen.length; i++){
          robot = cellChosen[i]
       }
-      for(let j = 0; j < cellChoseId.length; j++){
+      for (let j = 0; j < cellChoseId.length; j++){
          player = cellChoseId[j]
       }
-      if(player === robot){
+      if (player === robot){
          console.log("ya match")
          showMessage(`C'était trop facile \u{1F606}`);
          clearGrid();
@@ -160,19 +152,19 @@ window.addEventListener('DOMContentLoaded', () => {
          hideBtn(btn.play);
       }
       else {
-      console.log("ya pas match")
-      showMessage(`Déjà perdu t'abuses...\u{1F631}`)
-      clearGrid();
-      playerDo()
-      btn.play.textContent = "Rejouez";
-      showBtn(btn.play);
-      times = 2;
-      speed = 700;
+        console.log("ya pas match")
+        showMessage(`Déjà perdu t'abuses...\u{1F631}`)
+        clearGrid();
+        playerDo()
+        btn.play.textContent = "Rejouez";
+        showBtn(btn.play);
+        times = 2;
+        speed = 700;
       }
    }
  
    // condition et apparitions des balls
-   function intervalBall(){
+   const intervalBall = () => {
       console.log('lancement du jeu');
       let number = random();
       switch(number){
